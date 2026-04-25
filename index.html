@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ TRAINING</title>
+  <!-- chart.js -->
+  <!-- jsPDF and html2canvas for PDF generation -->
+ 
+  <!-- font & base reset -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<script>
+
+(function() {
+    // 1. Block Right-Click (contextmenu)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // 2. Block Keyboard Save Shortcuts (Ctrl+S, Ctrl+Shift+S, Cmd+S on Mac)
+    document.addEventListener('keydown', function(e) {
+        // Check for Ctrl+S or Cmd+S (on Mac)
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            return false;
+        }
+
+        // Also block Ctrl+Shift+S (Save As in some browsers)
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'S') {
+            e.preventDefault();
+            return false;
+        }
+
+        // Block Ctrl+U (View Source)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'u') {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Block Ctrl+P (Print/Save as PDF)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+            e.preventDefault();
+            return false;
+        }
+
+        // Block F12 (Developer Tools) - may not work in all browsers
+        if (e.key === 'F12') {
+            e.preventDefault();
+            return false;
+        }
+
+        // Block Ctrl+Shift+I (Developer Tools)
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'I') {
+            e.preventDefault();
+            return false;
+        }
+
+        // Block Ctrl+Shift+J (Console)
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'J') {
+            e.preventDefault();
+            return false;
+        }
+
+        // Block Ctrl+Shift+C (Inspect Element)
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 3. Disable drag-and-drop saving (dragging images or links to desktop)
+    document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // 4. Block text selection + copy/cut (disable selection if you want)
+    // Uncomment the next block if you want to prevent text selection as well
+    /*
+    document.addEventListener('selectstart', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    document.addEventListener('copy', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    document.addEventListener('cut', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    */
+
+    // 5. Disable Print Screen detection (Limited effect - cannot fully block screen capture)
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'PrintScreen') {
+            navigator.clipboard.writeText(''); // Clear clipboard
+            alert('Screenshots are disabled on this page.');
+        }
+    });
+
+    // 6. Additional: Disable right-click on images and links specifically
+    const allElements = document.querySelectorAll('img, a');
+    allElements.forEach(function(el) {
+        el.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+
+    // 7. Disable viewing page source via keyboard (Ctrl+U already handled)
+    // Also check for View Source from menu - limited prevention
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'U' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 8. Disable Save as from browser menu (cannot fully block, but we can override)
+    window.addEventListener('beforeunload', function(e) {
+        // Optional: show warning when trying to leave/close the page
+        // e.preventDefault();
+        // e.returnValue = '';
+    });
+
+    // 9. Disable right-click on the whole document (duplicate for safety)
+    window.oncontextmenu = function(e) {
+        e.preventDefault();
+        return false;
+    };
+
+    // 10. Disable Print command (Ctrl+P already handled, also override window.print)
+    window.print = function() {
+        return false;
+    };
+
+    // 11. Block Developer Tools via keyboard (F12, Ctrl+Shift+I, etc.) - additional check
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+            (e.ctrlKey && e.shiftKey && e.key === 'J') || 
+            (e.ctrlKey && e.shiftKey && e.key === 'C')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 12. Disable saving via Ctrl+Shift+S (Save As)
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'S' || e.key === 's')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 13. Disable Save As from menu (detect when page tries to unload)
+    window.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 14. Disable image saving via drag and drop
+    window.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // 15. Disable copy from any element (optional - uncomment if needed)
+    // document.querySelectorAll('*').forEach(el => {
+    //     el.addEventListener('copy', (e) => e.preventDefault());
+    //     el.addEventListener('cut', (e) => e.preventDefault());
+    // });
+})();
+
+</script>
+ <style>
+
+/* make bold keywords blue */
+.para-text b {
+color: blue !important;
+}
+
+/* class for words that were originally bold – used during read-aloud */
+.word-bold {
+font-weight: bold;
+color: blue !important;
+}
+
+/* all other styles remain identical */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+html, body {
+width: 100vw;
+height: 100vh;
+overflow: hidden;
+font-family: 'Inter', sans-serif;
+background: #000000;
+}
+
+#app {
+width: 100vw;
+height: 100vh;
+display: flex;
+align-items: flex-start;
+justify-content: center;
+padding: 0;
+background: #000000;
+}
+
+.boost-card {
+width: 100%;
+height: 100%;
+background: #f8fbff;
+border-radius: 0px;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+margin-top: 0;
+border: 10px solid black;
+border-radius: 50px;
+}
+
+#menuScreen {
+height: 100%;
+display: flex;
+flex-direction: column;
+}
+
+.menu-header {
+text-align: center;
+margin-bottom: 2px;
+flex-shrink: 0;
+}
+
+.menu-header h1 {
+font-size: 1.6rem;
+background: linear-gradient(135deg,#00258a,#5079ff);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+margin-top: 0;
+border-bottom: 4px solid #3b6eff;
+}
+
+.menu-dashboard {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0px;
+flex: 1;
+min-height: 0;
+}
+
+.instructions-panel {
+background: white;
+border-radius: 0px;
+padding:0px 0px;
+border: 1px solid rgba(255,255,255,0.7);
+height: 100%;
+width:98%;
+overflow-y: auto;
+}
+
+.instruction-list {
+list-style: none;
+font-size: 0.85rem;
+line-height: 1.2;
+color: #1e2f50;
+}
+
+.instruction-list li {
+margin-bottom: 6px;
+display: flex;
+gap: 8px;
+align-items: flex-start;
+}
+
+.instruction-list li span.bullet {
+background: #3b6eff;
+color: white;
+width: 18px;
+height: 18px;
+border-radius: 50%;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 0.7rem;
+flex-shrink: 0;
+margin-top: 1px;
+}
+
+.instruction-list li.check {
+color: #0f4c2b;
+}
+
+.instruction-list li.check span.bullet {
+background: #00a86b;
+}
+
+.weeks-wrapper {
+height: 100%;
+display: flex;
+flex-direction: column;
+}
+
+.weeks-grid {
+display: flex;
+flex-wrap: wrap;
+height: 100%;
+gap: 6px;
+}
+
+.flip-card {
+flex: 1 1 calc(33.333% - 6px);
+height: calc(95% / 3);
+perspective: 1000px;
+cursor: pointer;
+border-radius: 0px;
+background: #3f66d9;
+box-shadow:  20px 20px 60px #3657b8,
+             -20px -20px 60px #4875fa;
+}
+
+.flip-inner {
+position: relative;
+width: 100%;
+height: 100%;
+transition: transform 0.4s;
+transform-style: preserve-3d;
+background-color: #ecf0ff;
+border-radius: 0px;
+}
+
+.flip-card:hover .flip-inner {
+transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+position: absolute;
+width: 100%;
+height: 100%;
+backface-visibility: hidden;
+border-radius:0px;
+padding: 6px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+background-color: white;
+
+
+}
+
+.flip-front {
+background-color: #ecf0ff;
+color: #0a1c3f;
+background-image: url('Images/flipfront3.png');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+border:1px dashed blue;
+
+}
+
+.flip-front h2 {
+font-size: 1.4rem;
+font-weight: 800;
+}
+
+.flip-back {
+background-color: white;
+color: black;
+
+background-color:white;
+transform: rotateY(180deg);
+border:1px dashed blue;
+
+text-align:left;
+}
+
+.flip-back p {
+ font-family: "Comic Sans MS", "Comic Sans", cursive;
+font-weight: bold;
+font-size: 0.85rem;
+text-align: left;
+color: white;
+margin: 0;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+height: 100%;
+font-family: "Comic Sans MS", "Comic Sans", cursive;
+font-size: 17px;
+line-height: 1.1;
+}
+
+
+h2{
+position:absolute;
+bottom:0;
+left:0;
+width:100%;
+
+background: white;
+color:black;
+font-family:"Times New Roman", Times, serif;
+margin:0;
+text-align:center;
+font-size:15px;
+}
+
+h5{
+
+width:100%;
+
+background: transparent;
+color:black;
+font-family:"Times New Roman", Times, serif;
+font-size:20px;
+padding:5px 6px;  /* top-bottom 5px, left-right 6px */
+display:flex;
+justify-content:center;   /* horizontal center */
+align-items:middle;       /* vertical middle */
+text-align:center;
+text-transform: uppercase; /* makes text uppercase */
+}
+h8{
+background:white;
+font-family:"Times New Roman", Times, serif;
+font-size:13px;
+font-weight:bold;
+display:block;
+text-align:left;
+width:100%;
+color:black;
+border-bottom:1px dashed grey;
+
+
+}
+/* From Uiverse.io by ferlagher */ 
+button {
+  position: relative;
+  font-size:25px;
+  padding:3px 3px;
+  height:100%;
+  cursor:pointer;
+  background-color:white;
+  text-decoration: none;
+  border:0.5px dashed blue;
+  width:100%;
+  color:black;
+  border-radius:15px;
+  font-family: "Roboto Condensed", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+}
+
+button::before {
+  position: absolute;
+  content: '';
+  height: 0;
+  width: 0;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(33,33,33,1) 0%, rgba(33,33,33,1) 50%, rgba(150,4,31,1) 50%, rgba(191,4,38,1) 60%);
+  border-radius: 0 0 0.5em 0;
+  box-shadow: 0.2em 0.2em 0.2em rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+}
+
+button:hover::before {
+  width: 1.6em;
+  height: 1.6em;
+}
+
+button:active {
+  transform: translate(0.1em, 0.1em);
+}
+        /* ONE MAIN DIV — everything inside, single column */
+        .bitwise-single-col {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .inner-content {
+            padding: 2rem 2rem;
+        }
+        /* heading style */
+        h1 {
+            font-size: 2.0rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0B2B5E, #1f6392);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            border-left: 0px solid #1f6392;
+            padding-left: 20px;
+            margin: 0 0 0.5rem 0;
+        }
+        .subhead {
+            font-size: 1.15rem;
+            color: #1f4973;
+            background: #eaf3ff;
+            padding: 0.9rem 1.5rem;
+            border-radius: 28px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        .section-card {
+            background: #ffffff;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px #e9edf2;
+            overflow: hidden;
+        }
+        .section-title {
+            background: #f8fafd;
+            font-size: 1.55rem;
+            font-weight: 700;
+            padding: 0.9rem 1.5rem;
+            border-bottom: 2px solid #dee6ef;
+            color: #0a3f6f;
+        }
+        .section-body {
+            padding: 5px 5px;
+        }
+        /* steps style */
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin: 1rem 0;
+        }
+        .step-item {
+            display: flex;
+            gap: 12px;
+            background: #fbfeff;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border-left: 4px solid #2c8fcc;
+        }
+        .step-num {
+            font-weight: 800;
+            background: #e2eff9;
+            border-radius: 30px;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #0059b3;
+            flex-shrink: 0;
+        }
+        /* examples style: full width, no columns */
+        .example-full {
+            background: #fff7eb;
+            border-radius: 1.2rem;
+            padding: 1rem 1.4rem;
+            margin: 1.2rem 0;
+            border-top: 5px solid #ffae42;
+        }
+        .example-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #b45f06;
+            margin-bottom: 6px;
+        }
+        .ex-detail {
+            font-family: monospace;
+            background: #fff0df;
+            padding: 8px 12px;
+            border-radius: 14px;
+            margin: 10px 0;
+        }
+        /* PROGRAM BLOCKS - looking like real IDE */
+        .prog {
+            background: #0d1f2c;
+            border-radius: 18px;
+            margin: 1.2rem 0;
+            overflow-x: auto;
+            border: 1px solid #264d6e;
+        }
+        .prog-header {
+            background: #1a2f3e;
+            padding: 8px 16px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #9ac9e8;
+            border-bottom: 1px solid #2d5577;
+        }
+        pre {
+            margin: 0;
+            padding: 1.2rem 1.5rem;
+            font-family: 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+            font-size: 0.85rem;
+            background: #0d1f2c;
+            color: #eef4ff;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        .inline-code {
+            background: #eef2f8;
+            color: #c7254e;
+            padding: 0.2rem 0.45rem;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        hr {
+            margin: 1.2rem 0;
+            border-color: #e2e8f0;
+        }
+        .qa-block-single {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 1rem;
+            border: 1px solid #dee6f0;
+        }
+        .blank-highlight {
+            background: #fcf4e8;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        footer {
+            background: #f4f9fe;
+            text-align: center;
+            padding: 1.2rem;
+            font-size: 0.8rem;
+            border-top: 1px solid #e0ecf5;
+            color: #2c577c;
+        }
+        .badge {
+            background: #e1ecf9;
+            border-radius: 100px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+        .code-block-plain {
+            background: #f1f5f9;
+            padding: 12px;
+            font-family: monospace;
+            border-radius: 14px;
+            margin: 12px 0;
+            white-space: pre-wrap;
+        }
+#LeftPanel section {
+  display: none;
+}
+
+#LeftPanel section.active {
+  display: block;
+}
+#RightPanel .right-sec {
+  display: none;
+}
+
+#RightPanel .right-sec.active {
+  display: block;
+}
+     </style>
+</head>
+<body>
+
+
+  <div class="boost-card">
+
+    <!-- MENU SCREEN -->
+  
+
+      <div class="menu-dashboard">
+
+        <!-- LEFT PANEL -->
+        <div id="LeftPanel"class="instructions-panel">
+
+   <section id="Topic1">      
+
+  <div class="inner-content"style="width:100%;padding:0px 0px;">
+
+        <!-- Heading style -->
+        <h1>1. Bitwise Operations</h1>
+        <div class="subhead">Bitwise operations work directly on the binary form of numbers. They allow manipulation of individual bits instead of whole values. These operations are widely used in optimization, system programming, and efficient calculations.</div>
+
+        <!-- 2. Binary Numbers -->
+        <div class="section-card">
+            <div class="section-title">2. Binary Numbers</div>
+            <div class="section-body">
+                <strong>2.1 Concept of Binary</strong>
+                <p>Binary numbers use only two digits: 0 and 1. Each position represents a power of 2 starting from the right. The decimal value is found by adding powers of 2 where bits are 1.</p>
+                <div class="code-block-plain">Bit position:  7  6  5  4  3  2  1  0<br>Value:       128 64 32 16  8  4  2  1</div>
+                <strong>2.2 Examples</strong>
+                <p>Examples help understand how binary converts into decimal. Each binary number is evaluated by checking positions of 1. Step-by-step conversion makes the concept clear.</p>
+                
+                <!-- Example 1 (full width) -->
+                <div class="example-full">
+                    <div class="example-title">Example 1: 00000110 = 6</div>
+                    <strong>Step-by-Step Concept</strong><br>Bits at positions 2 and 1 are 1<br>Values = 4 + 2<br>Result = 6
+                    <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 6;
+    cout << x;
+}</code></pre></div>
+                    <strong>Line-by-Line Explanation</strong>
+                    <div class="step-list">
+                        <div class="step-item"><span class="step-num">1</span><span>#include &lt;iostream&gt; → Includes input-output library, enables use of cout, Required for printing output</span></div>
+                        <div class="step-item"><span class="step-num">2</span><span>using namespace std; → Allows using cout without std::, Simplifies code, Uses standard namespace</span></div>
+                        <div class="step-item"><span class="step-num">3</span><span>int main() → Entry point of program, Execution starts here, Returns integer</span></div>
+                        <div class="step-item"><span class="step-num">4</span><span>{ → Begins function block</span></div>
+                        <div class="step-item"><span class="step-num">5</span><span>int x = 6; → Declares integer variable, Stores value 6, Represents binary 00000110 internally</span></div>
+                        <div class="step-item"><span class="step-num">6</span><span>cout << x; → Prints value of x, Output = 6</span></div>
+                        <div class="step-item"><span class="step-num">7</span><span>} → Ends program</span></div>
+                    </div>
+                </div>
+
+                <!-- Example 2 full width -->
+                <div class="example-full">
+                    <div class="example-title">Example 2: 00001010 = 10</div>
+                    <strong>Concept Steps</strong><br>Bits at positions 3 and 1<br>Values = 8 + 2<br>Result = 10
+                    <div class="prog"><div class="prog-header">C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 10;
+    cout << x;
+}</code></pre></div>
+                    <strong>Line-by-Line Explanation</strong><br>(Same structure applies)<br>#include &lt;iostream&gt; → enables output<br>using namespace std; → avoids std::<br>int main() → start<br>{ → block start<br>int x = 10; → store value<br>cout << x; → prints 10<br>} → end
+                </div>
+
+                <!-- Example 3 full width -->
+                <div class="example-full">
+                    <div class="example-title">Example 3: 00001100 = 12</div>
+                    <strong>Concept Steps</strong><br>Bits at positions 3 and 2<br>Values = 8 + 4<br>Result = 12
+                    <div class="prog"><div class="prog-header">C++ Program + Explanation</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int x = 12;
+    cout << x;
+}</code></pre>(Same structure as above, only value changes)
+                </div>
+
+                <div><strong>Practice – Binary</strong><br>Convert 00010100 &nbsp;&nbsp; Convert 00001111 &nbsp;&nbsp; Convert 00100001</div>
+            </div>
+        </div>
+
+        <!-- 3. Two's Complement -->
+        <div class="section-card">
+            <div class="section-title">3. Two’s Complement and Negative Numbers</div>
+            <div class="section-body">
+                <p>Two’s complement is used to represent negative numbers in binary. It ensures arithmetic operations work correctly. It is the standard method used in computers.</p>
+                <strong>3.1 How Positive Numbers Look</strong><p>Positive numbers are stored normally in binary. The leftmost bit remains 0. No extra conversion is required.</p>
+                <div><strong>Example: 5</strong></div>
+                <div class="prog"><div class="prog-header">C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int x = 5;
+    cout << x;
+}</code></pre></div>
+                <p><strong>Full Explanation</strong> (Same line-by-line explanation as earlier)</p>
+                <strong>3.2 How Negative Numbers Are Stored</strong><p>Negative numbers are created by flipping bits and adding 1. This process is called two’s complement. It ensures proper arithmetic operations.</p>
+                <div><strong>Example: -5</strong><br>Concept Steps<br>+5 = 00000101<br>Flip = 11111010<br>Add 1 = 11111011</div>
+                <div class="prog"><div class="prog-header">C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int x = -5;
+    cout << x;
+}</code></pre></div>
+                <p><strong>Full Explanation</strong><br>Include library, Use namespace, Start main, Declare x = -5, Print value, End program</p>
+                <strong>3.3 Why This is Nice</strong><p>Two’s complement simplifies calculations. Addition and subtraction use same logic. Only one representation of zero exists.</p>
+                <strong>3.4 Right Shift and Negatives</strong><p>Right shift moves bits to the right. Signed numbers keep the sign bit. This keeps negative numbers negative.</p>
+                <div><strong>Example: -4 >> 1</strong><br>Concept Steps<br>-4 = 11111100<br>Shift → 11111110<br>Result = -2</div>
+                <div class="prog"><div class="prog-header">C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int x = -4;
+    cout << (x >> 1);
+}</code></pre></div>
+                <p><strong>Line-by-Line Explanation</strong><br>Include library, Use namespace, Start main, Store -4, Shift right, Print result (-2), End</p>
+                <div><strong>Practice</strong><br>-8 >> 1 &nbsp;&nbsp; -2 >> 1</div>
+            </div>
+        </div>
+
+        <!-- 4. Main Bitwise Operators + 5. Seeing Bitwise -->
+        <div class="section-card">
+            <div class="section-title">4. The Main Bitwise Operators &amp; 5. Seeing Bitwise Operations in Binary</div>
+            <div class="section-body">
+                <p>Bitwise operators operate on individual bits. Each operator has a specific rule. They are useful for low-level operations.</p>
+                <p>Binary representation helps visualize operations. Each bit is compared individually. This makes understanding easier.</p>
+                <div class="code-block-plain">a = 6  → 00000110<br>b = 10 → 00001010</div>
+                <strong>5.1 AND (&amp;)</strong><p>AND returns 1 only if both bits are 1. Otherwise, it returns 0. It is used for masking.</p>
+                <div><strong>Example: a &amp; b</strong><br>Concept Steps: Compare bits, Only common 1 remains → Result = 2</div>
+                <div class="prog"><pre><code>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int a = 6, b = 10;
+    cout << (a & b);
+}</code></pre></div>
+                <p><strong>Full Explanation:</strong> Include library, Use namespace, Start main, Declare variables, Perform AND, Print result, End</p>
+                <strong>5.2 OR (|)</strong><p>OR returns 1 if any bit is 1. It combines bits. It is used to set bits.</p>
+                <div><strong>Example: a | b</strong><br>C++ Program + Explanation (Same structure → result 14)</div>
+                <strong>5.3 XOR (^)</strong><p>XOR returns 1 when bits differ. It is useful for toggling. Same bits give 0.</p>
+                <div><strong>Example: a ^ b</strong><br>C++ Program + Explanation (Same structure → result 12)</div>
+                <strong>5.4 NOT (~)</strong><p>NOT flips all bits. It converts 1 to 0 and 0 to 1. It produces negative numbers in signed types.</p>
+                <div><strong>Example: ~a</strong></div>
+                <div class="prog"><pre><code>#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int a = 6;
+    cout << (~a);
+}</code></pre></div>
+                <p><strong>Explanation:</strong> Flip bits of 6 → Result becomes negative, Output displayed</p>
+                <strong>5.5 Shifts</strong><p>Shift operators move bits left or right. Left shift multiplies. Right shift divides.</p>
+                <div><strong>Example: a << 1</strong> C++ Program + Explanation → Result = 12</div>
+                <div><strong>Example: b >> 1</strong> C++ Program + Explanation → Result = 5</div>
+                <div><strong>Practice – Bitwise</strong><br>5 &amp; 3 &nbsp;&nbsp; 5 | 3 &nbsp;&nbsp; 5 ^ 3 &nbsp;&nbsp; 8 &lt;&lt; 2 &nbsp;&nbsp; 16 &gt;&gt; 3</div>
+            </div>
+        </div>
+
+        <!-- 6. Simple C++ Example -->
+        <div class="section-card">
+            <div class="section-title">6. Simple C++ Example</div>
+            <div class="section-body">
+                <p>This program shows multiple bitwise operations. It also prints binary values. It helps visualize bit manipulation.</p>
+                <div class="prog"><div class="prog-header">Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+void printBits(int x) {
+    for (int i = 7; i >= 0; i--) {
+        cout << ((x >> i) & 1);
+    }
+}
+
+int main() {
+    int a = 6, b = 10;
+
+    printBits(a);
+    cout << endl;
+
+    printBits(b);
+    cout << endl;
+
+    cout << (a & b) << endl;
+    cout << (a | b) << endl;
+}</code></pre></div>
+                <p><strong>Step-by-Step Explanation</strong><br>1. Include library → enables output<br>2. Namespace → avoids std::<br>3. Function printBits: Loop from 7 to 0, Shift bits, Extract last bit<br>4. Main function: Declare variables, Call function, Print results</p>
+            </div>
+        </div>
+
+        <!-- Q1 - Q7 single column style -->
+        <div class="section-card"><div class="section-title">📝 Questions Q1 – Q7 (Output)</div><div class="section-body">
+            <div class="qa-block-single">Q1<br>#include &lt;iostream&gt; ... int x=6; cout<<x;<br>👉 Output: __________ <strong style="background:#e9f0f9; padding:2px 12px;">6</strong></div>
+            <div class="qa-block-single">Q2<br>int a=6,b=10; cout << (a & b);<br>👉 Output: __________ <strong>2</strong></div>
+            <div class="qa-block-single">Q3<br>cout << (a | b);<br>👉 Output: __________ <strong>14</strong></div>
+            <div class="qa-block-single">Q4<br>cout << (a ^ b);<br>👉 Output: __________ <strong>12</strong></div>
+            <div class="qa-block-single">Q5<br>int x=8; cout << (x << 1);<br>👉 Output: __________ <strong>16</strong></div>
+            <div class="qa-block-single">Q6<br>int x=16; cout << (x >> 2);<br>👉 Output: __________ <strong>4</strong></div>
+            <div class="qa-block-single">Q7<br>int x=-4; cout << (x >> 1);<br>👉 Output: __________ <strong>-2</strong></div>
+        </div></div>
+
+        <!-- SECTION 2: SYNTAX ERRORS -->
+        <div class="section-card"><div class="section-title">SECTION 2: FIND THE SYNTAX ERROR</div><div class="section-body">
+            <div class="qa-block-single"><strong>Q8</strong><br><code>include &lt;iostream&gt;<br>using namespace std<br>int main() { int x = 10 cout << x; }</code><br>👉 Find and correct errors: __________________ <div class="inline-code"># missing, missing semicolon after std and after x=10, fix: #include &lt;iostream&gt;, using namespace std; , int x=10;</div></div>
+            <div class="qa-block-single"><strong>Q9</strong><br><code>int a = 6 b = 10; cout << a & b;</code><br>👉 Error: __________________ <div class="inline-code">Missing comma between a=6 and b=10; also parentheses needed: cout << (a & b);</div></div>
+            <div class="qa-block-single"><strong>Q10</strong><br><code>int main() <br>    int x = 5;<br>    cout << x;<br>}</code><br>👉 Error: __________________ <div class="inline-code">Missing opening { after main()</div></div>
+        </div></div>
+
+        <!-- SECTION 3: COMPLETE THE CODE -->
+        <div class="section-card"><div class="section-title">SECTION 3: COMPLETE THE CODE</div><div class="section-body">
+            <div class="qa-block-single">Q11: AND → cout << (a ___ b);<br>👉 Fill operator: _______ <strong>&amp;</strong></div>
+            <div class="qa-block-single">Q12: OR → cout << (a ___ b);<br>👉 Fill: _______ <strong>|</strong></div>
+            <div class="qa-block-single">Q13: XOR → cout << (a ___ b);<br>👉 Fill: _______ <strong>^</strong></div>
+            <div class="qa-block-single">Q14: LEFT SHIFT → cout << (x ___ 2);<br>👉 Fill: _______ <strong>&lt;&lt;</strong></div>
+            <div class="qa-block-single">Q15: RIGHT SHIFT → cout << (x ___ 1);<br>👉 Fill: _______ <strong>&gt;&gt;</strong></div>
+        </div></div>
+
+        <!-- SECTION 4: WRITE THE CODE -->
+        <div class="section-card"><div class="section-title">SECTION 4: WRITE THE CODE</div><div class="section-body">
+            <p><strong>Q16</strong> Write a program to print the binary equivalent of a number using loop.<br><div class="prog"><pre><code>void printBits(int x) {
+    for (int i = 7; i >= 0; i--)
+        cout << ((x >> i) & 1);
+}</code></pre></div></p>
+            <p><strong>Q17</strong> Write a program to: Take two numbers, Print AND, OR, XOR<br><div class="prog"><pre><code>int main() {
+    int x,y; cin>>x>>y;
+    cout << (x&y) << " " << (x|y) << " " << (x^y);
+}</code></pre></div></p>
+            <p><strong>Q18</strong> Input a number, Left shift it by 2, Print result<br><div class="prog"><pre><code>int n; cin>>n; cout << (n << 2);</code></pre></div></p>
+            <p><strong>Q19</strong> Store -8, Right shift by 1, Print output<br><div class="prog"><pre><code>int x = -8; cout << (x >> 1); // -4</code></pre></div></p>
+        </div></div>
+
+        <!-- SECTION 5: TRUE/FALSE -->
+        <div class="section-card"><div class="section-title">SECTION 5: TRUE / FALSE</div><div class="section-body">
+            <div class="qa-block-single">& returns 1 if both bits are 1 → ______ <strong>True</strong></div>
+            <div class="qa-block-single">| returns 1 if both bits are 0 → ______ <strong>False</strong></div>
+            <div class="qa-block-single">^ returns 1 when bits are different → ______ <strong>True</strong></div>
+            <div class="qa-block-single">&lt;&lt; divides number → ______ <strong>False (multiplies)</strong></div>
+            <div class="qa-block-single">&gt;&gt; divides number → ______ <strong>True</strong></div>
+        </div></div>
+
+        <!-- SECTION 6: MIXED LOGIC -->
+        <div class="section-card"><div class="section-title">SECTION 6: MIXED LOGIC QUESTIONS</div><div class="section-body">
+            <div class="qa-block-single">Q21: 5 & 3 → <strong>1</strong></div>
+            <div class="qa-block-single">Q22: 5 | 2 → <strong>7</strong></div>
+            <div class="qa-block-single">Q23: 7 ^ 7 → <strong>0</strong></div>
+            <div class="qa-block-single">Q24: ~0 → <strong>-1</strong></div>
+            <div class="qa-block-single">Q25: 1 << 3 → <strong>8</strong></div>
+        </div></div>
+
+        <!-- ADDITIONAL PROGRAMS 1 to 5 exactly as given, single column -->
+        <div class="section-card"><div class="section-title">PROGRAM 1: PRINT BINARY REPRESENTATION</div><div class="section-body">
+            <p>🎯 Goal: Understand how a number is stored in binary and how each bit is extracted using shifting.</p>
+            <div class="prog"><div class="prog-header">💻 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+void printBits(int x) {
+    for (int i = 7; i >= 0; i--) {
+        cout << ((x >> i) & 1);
+    }
+}
+
+int main() {
+    int x = 6;
+    printBits(x);
+}</code></pre></div>
+            <p><strong>🪜 Step-by-Step Explanation</strong><br>Step 1: #include &lt;iostream&gt; Adds input/output library Enables cout<br>Step 2: using namespace std; Avoids writing std::cout Makes code shorter<br>Step 3: void printBits(int x) Function to print binary form Takes number as input<br>Step 4: for (int i = 7; i >= 0; i--) Loop from bit 7 to 0 Covers 8-bit representation<br>Step 5: (x >> i) Shifts bit to rightmost position<br>Step 6: & 1 Extracts last bit only<br>Step 7: cout Prints binary result of 6 → 00000110</p>
+        </div></div>
+
+        <div class="section-card"><div class="section-title">✅ PROGRAM 2: AND, OR, XOR OPERATIONS</div><div class="section-body">
+            <p>🎯 Goal: Understand how bitwise AND, OR, XOR work between two numbers.</p>
+            <div class="prog"><div class="prog-header">💻 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a = 6, b = 10;
+    cout << (a & b) << endl;
+    cout << (a | b) << endl;
+    cout << (a ^ b) << endl;
+}</code></pre></div>
+            <p><strong>🪜 Step-by-Step Explanation</strong><br>Step 1: Include library Enables input/output<br>Step 2: Define variables a = 6 → 00000110, b = 10 → 00001010<br>Step 3: a & b Only common 1 bits remain Result = 2<br>Step 4: a | b Any 1 becomes 1 Result = 14<br>Step 5: a ^ b Different bits become 1 Result = 12</p>
+        </div></div>
+
+        <div class="section-card"><div class="section-title">✅ PROGRAM 3: LEFT SHIFT AND RIGHT SHIFT</div><div class="section-body">
+            <p>🎯 Goal: Understand how shifting changes value (multiply/divide by 2).</p>
+            <div class="prog"><div class="prog-header">💻 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 6;
+    cout << (x << 1) << endl;
+    cout << (x >> 1) << endl;
+}</code></pre></div>
+            <p><strong>🪜 Step-by-Step Explanation</strong><br>Step 1: x = 6 Binary = 00000110<br>Step 2: x << 1 Shift left Becomes 00001100 Value = 12 (×2)<br>Step 3: x >> 1 Shift right Becomes 00000011 Value = 3 (÷2)</p>
+        </div></div>
+
+        <div class="section-card"><div class="section-title">✅ PROGRAM 4: NOT (~) AND TWO’S COMPLEMENT IDEA</div><div class="section-body">
+            <p>🎯 Goal: Understand how NOT operator flips bits and creates negative numbers.</p>
+            <div class="prog"><div class="prog-header">💻 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 5;
+    cout << (~x);
+}</code></pre></div>
+            <p><strong>🪜 Step-by-Step Explanation</strong><br>Step 1: x = 5 Binary = 00000101<br>Step 2: ~x Flip all bits → 11111010<br>Step 3: Two’s complement effect Stored as negative number Output = -6 (in most systems)<br>Step 4: Print result Shows negative value due to complement system</p>
+        </div></div>
+
+        <div class="section-card"><div class="section-title">✅ PROGRAM 5: FULL BITWISE COMBINATION PROGRAM</div><div class="section-body">
+            <p>🎯 Goal: Understand ALL bitwise operations together with binary display.</p>
+            <div class="prog"><div class="prog-header">💻 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+void printBits(int x) {
+    for (int i = 7; i >= 0; i--) {
+        cout << ((x >> i) & 1);
+    }
+}
+
+int main() {
+    int a = 6;
+    int b = 10;
+
+    cout << "a = "; printBits(a); cout << endl;
+    cout << "b = "; printBits(b); cout << endl;
+
+    cout << "AND: "; printBits(a & b); cout << endl;
+    cout << "OR : "; printBits(a | b); cout << endl;
+    cout << "XOR: "; printBits(a ^ b); cout << endl;
+
+    cout << "LSH: "; printBits(a << 1); cout << endl;
+    cout << "RSH: "; printBits(b >> 1); cout << endl;
+}</code></pre></div>
+            <p><strong>🪜 Step-by-Step Explanation</strong><br>Step 1: Include library Enables output<br>Step 2: Function printBits Extracts each bit using shift + AND<br>Step 3: Variables a = 6 → 00000110, b = 10 → 00001010<br>Step 4: Print binary values Shows original numbers in binary<br>Step 5: AND operation Only common 1 bits remain → 2<br>Step 6: OR operation All 1 bits combined → 14<br>Step 7: XOR operation Different bits → 12<br>Step 8: Left shift Multiply by 2 → 12<br>Step 9: Right shift Divide by 2 → 5</p>
+        </div></div>
+
+
+
+
+
+</div>
+</div> 
+</section>
+
+
+
+
+   <section id="Topic2">      
+
+  <div class="inner-content"style="padding:0px 0px;">
+
+<!-- Heading -->
+        <h1>📦 STRUCTURES (struct)</h1>
+        <div class="subhead">Group different data types into one custom unit — model real-world objects like products, students, cars, and books.</div>
+
+        <!-- 1. What Is a struct? -->
+        <div class="section-card">
+            <div class="section-title">1. What Is a struct?</div>
+            <div class="section-body">
+                <p>In C++, a structure (struct) lets you group different pieces of data together under one name. You can think of it like a custom data type that you design yourself.</p>
+                <p>A struct is used to combine multiple variables of different types into one single unit. It helps represent real-world objects like products, students, cars, or books. It improves readability and organizes data efficiently.</p>
+                <p>A struct does not perform actions like functions. It only stores data. Each variable inside a struct is called a <strong>member</strong>.</p>
+            </div>
+        </div>
+
+        <!-- 2. Syntax of struct -->
+        <div class="section-card">
+            <div class="section-title">2. Syntax of struct</div>
+            <div class="section-body">
+                <div class="code-block-plain">struct TypeName {<br>    member_type1 member_name1;<br>    member_type2 member_name2;<br>};</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>TypeName → name of structure</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>Members → variables inside structure</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>Different data types allowed</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>Ends with semicolon</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Example: Product Structure (GIVEN) -->
+        <div class="section-card">
+            <div class="section-title">3. Example: Product Structure</div>
+            <div class="section-body">
+                <p><strong>GOAL</strong><br>Understand how struct groups different data types (int + double) and how objects access members.</p>
+                <div class="prog">
+                    <div class="prog-header">📄 C++ PROGRAM</div>
+                    <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+struct product {
+    int weight;     // in grams
+    double price;   // in riyals
+};
+
+int main() {
+    product apple;
+    product banana, melon;
+
+    apple.weight = 150;
+    apple.price  = 1.99;
+
+    banana.weight = 120;
+    banana.price  = 0.99;
+
+    cout << "Apple: "  << apple.weight  << " g, " << apple.price << " SAR" << endl;
+    cout << "Banana: " << banana.weight << " g, " << banana.price << " SAR" << endl;
+}</code></pre>
+                </div>
+                <div><strong>STEP-BY-STEP EXPLANATION (LINE BY LINE)</strong></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>#include &lt;iostream&gt; → Adds input/output library, Required for cout, Enables printing to screen</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>using namespace std; → Avoids writing std::cout, Uses standard library directly, Makes code simpler</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>struct product → Creates custom data type, Name is product, Groups related data together</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>Members inside struct → int weight stores weight in grams, double price stores price in riyals, These are variables inside struct</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>product apple; → Creates object apple, Memory allocated for product, Can store weight and price</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>product banana, melon; → Creates two more objects, Each object has its own data</span></div>
+                    <div class="step-item"><span class="step-num">7</span><span>Assign values → apple.weight = 150, apple.price = 1.99, Same for banana</span></div>
+                    <div class="step-item"><span class="step-num">8</span><span>cout statements → Displays values on screen, Uses dot operator (.), Accesses struct members</span></div>
+                    <div class="step-item"><span class="step-num">9</span><span>End of program → Closing brace ends main function, Program stops execution</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Accessing Members -->
+        <div class="section-card">
+            <div class="section-title">4. Accessing Members</div>
+            <div class="section-body">
+                <p>Use dot operator (.) to access members:</p>
+                <div class="code-block-plain">apple.weight → integer value<br>apple.price → double value</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>Each object has separate memory</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>Dot operator connects object and member</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>Used for reading and writing values</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Declaring Objects with struct -->
+        <div class="section-card">
+            <div class="section-title">5. Declaring Objects with struct</div>
+            <div class="section-body">
+                <div class="code-block-plain">struct product {<br>    int weight;<br>    double price;<br>} apple, banana, melon;</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>Objects declared inside struct</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>Saves extra lines</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>All variables are product type</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Additional Example: Student Struct -->
+        <div class="section-card">
+            <div class="section-title">6. Additional Example: Student Struct</div>
+            <div class="section-body">
+                <p><strong>GOAL</strong><br>Understand how struct stores real-world data like student information.</p>
+                <div class="prog">
+                    <div class="prog-header">📄 C++ PROGRAM</div>
+                    <pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+struct student {
+    string name;
+    int age;
+    float marks;
+};
+
+int main() {
+    student s1;
+
+    s1.name = "Ali";
+    s1.age = 15;
+    s1.marks = 88.5;
+
+    cout << s1.name << endl;
+    cout << s1.age << endl;
+    cout << s1.marks << endl;
+}</code></pre>
+                </div>
+                <div><strong>STEP-BY-STEP EXPLANATION</strong></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>include library → Enables input/output</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>struct student → Creates custom type student, Stores name, age, marks</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>student s1 → Creates object s1, Memory allocated</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>Assign values → Stores data in struct members</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>Output values → Prints stored data</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>End program → Execution ends</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Key Points -->
+        <div class="section-card">
+            <div class="section-title">7. Key Points</div>
+            <div class="section-body">
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">✓</span><span>struct groups different data types</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Used for real-world objects</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Access using dot operator</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Can create multiple objects</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Improves code structure</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Practice Questions -->
+        <div class="section-card">
+            <div class="section-title">8. Practice Questions</div>
+            <div class="section-body">
+                <div class="qa-block-single">1. Create struct for Book (title, pages, price)</div>
+                <div class="qa-block-single">2. Create struct for Mobile (RAM, storage, price)</div>
+                <div class="qa-block-single">3. Create 3 product objects</div>
+                <div class="qa-block-single">4. Take input using cin in struct</div>
+                <div class="qa-block-single">5. Print multiple student records</div>
+            </div>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="section-card">
+            <div class="section-title">📌 SUMMARY</div>
+            <div class="section-body">
+                <p>Structures allow grouping different data types into one unit. They help model real-world objects in programming. They make code organized, reusable, and easy to understand.</p>
+            </div>
+        </div>
+
+        <!-- BONUS: Additional Struct Example - Book -->
+        <div class="section-card">
+            <div class="section-title">📖 Bonus Example: Book Structure</div>
+            <div class="section-body">
+                <div class="prog">
+                    <div class="prog-header">📘 C++ Program</div>
+                    <pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+struct Book {
+    string title;
+    int pages;
+    double price;
+};
+
+int main() {
+    Book myBook;
+    myBook.title = "C++ Programming";
+    myBook.pages = 450;
+    myBook.price = 49.99;
+
+    cout << "Title: " << myBook.title << endl;
+    cout << "Pages: " << myBook.pages << endl;
+    cout << "Price: $" << myBook.price << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">💡</span><span>struct Book groups title (string), pages (int), price (double). Dot operator accesses each member.</span></div>
+                </div>
+
+
+
+
+            </div>
+       
+
+
+
+
+
+
+</div>
+</div> 
+</section>
+
+
+<section id="Topic3">
+
+    <div class="inner-content"style="padding:0px 0px;">
+        <h1>⚡ BIT MANIPULATION TRICKS (C++)</h1>
+        <div class="subhead">Work directly with individual bits — faster operations, competitive programming, and low-level optimization.</div>
+
+        <div class="section-card">
+            <div class="section-title">1. Introduction to Bit Manipulation Tricks</div>
+            <div class="section-body">
+                <p>Bit manipulation tricks are techniques used to work directly with individual bits of a number. These tricks make programs faster and more efficient compared to normal arithmetic operations. They are widely used in competitive programming and system-level coding.</p>
+                <p>We assume:</p>
+                <ul style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                    <li>int x → non-negative integer</li>
+                    <li>int k → bit index (0-based, 0 = least significant bit)</li>
+                </ul>
+                <p>We use masks like (1 << k) where only bit k is 1.</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">2. Checking if a Bit is 1</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>We check whether a specific bit is ON (1) or OFF (0). This is useful in feature flags, permissions, and binary states.</p>
+                <div class="code-block-plain">Formula: bool isSet = (x >> k) & 1;</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>x >> k → moves k-th bit to rightmost position</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>& 1 → extracts only last bit</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>result is 0 or 1 (false or true)</span></div>
+                </div>
+                <div class="example-full">
+                    <div class="example-title">Example</div>
+                    x = 10 → 1010<br>Check k = 1<br>Result = 1 (bit is set)
+                </div>
+                <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+bool kthBitIsSet(int n, int k) {
+    return (n >> k) & 1;
+}
+
+int main() {
+    int n = 10;
+    int k = 1;
+
+    cout << kthBitIsSet(n, k);
+}</code></pre></div>
+                <div><strong>Step-by-Step Explanation</strong></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>include library → enables input/output</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>define function → checks k-th bit</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>n >> k → shifts bit to right</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>& 1 → extracts bit</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>main() starts execution</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>n = 10 (binary 1010)</span></div>
+                    <div class="step-item"><span class="step-num">7</span><span>k = 1 checks second bit</span></div>
+                    <div class="step-item"><span class="step-num">8</span><span>output = 1 (true)</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">3. Setting the k-th Bit to 1</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>We force a specific bit to become 1 without changing other bits.</p>
+                <div class="code-block-plain">Formula: x |= (1 << k);</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>1 << k → creates mask</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>| OR sets bit to 1</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>other bits remain unchanged</span></div>
+                </div>
+                <div class="example-full">
+                    <div class="example-title">Example</div>
+                    x = 4 → 0100<br>Set k = 0<br>Result = 0101 (5)
+                </div>
+                <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 4;
+    int k = 0;
+
+    x |= (1 << k);
+
+    cout << x;
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>include iostream → output enabled</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>x = 4 → binary 0100</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>k = 0 → target bit</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>1 << k → 0001 mask</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>OR operation sets bit</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>result becomes 5</span></div>
+                    <div class="step-item"><span class="step-num">7</span><span>print output</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">4. Clearing the k-th Bit (Set to 0)</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>We force a bit to become 0 while keeping others unchanged.</p>
+                <div class="code-block-plain">Formula: x &= ~(1 << k);</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>1 << k → mask with bit 1</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>~ flips bits</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>& clears target bit</span></div>
+                </div>
+                <div class="example-full">
+                    <div class="example-title">Example</div>
+                    x = 13 → 1101<br>Clear k = 2<br>Result = 1001 (9)
+                </div>
+                <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 13;
+    int k = 2;
+
+    x &= ~(1 << k);
+
+    cout << x;
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>x = 13 → 1101</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>k = 2 selects third bit</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>1 << k → 0100</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>~ becomes ...1011</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>AND clears bit</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>result = 9</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">5. Toggling (Flipping) the k-th Bit</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>Flipping means changing 0 → 1 or 1 → 0.</p>
+                <div class="code-block-plain">Formula: x ^= (1 << k);</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>XOR flips bits</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>same bit → 0</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>different → 1</span></div>
+                </div>
+                <div class="example-full">
+                    <div class="example-title">Example</div>
+                    x = 5 → 0101<br>Toggle k = 2<br>Result = 0001 (1)
+                </div>
+                <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 5;
+    int k = 2;
+
+    x ^= (1 << k);
+
+    cout << x;
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>x = 5 → 0101</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>k = 2 → third bit</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>mask = 0100</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>XOR flips bit</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>result = 1</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">6. Remove Lowest Set Bit</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>This removes the rightmost 1-bit in a number.</p>
+                <div class="code-block-plain">Formula: x = x & (x - 1);</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>x - 1 changes lowest 1-bit</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>AND removes it</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>very important optimization trick</span></div>
+                </div>
+                <div class="example-full">
+                    <div class="example-title">Example</div>
+                    x = 12 → 1100<br>x - 1 = 1011<br>Result = 1000 (8)
+                </div>
+                <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 12;
+
+    x = x & (x - 1);
+
+    cout << x;
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>x = 12 → 1100</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>x - 1 = 1011</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>AND removes lowest 1-bit</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>result = 8</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">7. Check if Number is Power of Two</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>A power of two has exactly one bit set.</p>
+                <div class="code-block-plain">Formula: (x > 0) && (x & (x - 1)) == 0</div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>only one bit means power of two</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>removing bit gives zero</span></div>
+                </div>
+                <div class="example-full">
+                    <div class="example-title">Example</div>
+                    x = 8 → 1000 → YES<br>x = 12 → 1100 → NO
+                </div>
+                <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 8;
+
+    if (x > 0 && (x & (x - 1)) == 0)
+        cout << "Power of Two";
+    else
+        cout << "Not Power of Two";
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>check x > 0</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>compute x & (x - 1)</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>if result = 0 → power of two</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>print result</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">8. Get Lowest Set Bit</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>Isolates the rightmost 1-bit.</p>
+                <div class="code-block-plain">Formula: lowest = x & -x;</div>
+                <div class="example-full">
+                    <div class="example-title">Example</div>
+                    x = 12 → 1100<br>lowest = 0100 (4)
+                </div>
+                <div class="prog"><div class="prog-header">📄 C++ Program</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int x = 12;
+
+    int lowest = x & -x;
+
+    cout << lowest;
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>x = 12</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>-x is two's complement</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>AND isolates lowest bit</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>result = 4</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">9. QUICK SUMMARY</div>
+            <div class="section-body">
+                <div class="code-block-plain">
+                    • Check bit → (x >> k) & 1<br>
+                    • Set bit → x |= (1 << k)<br>
+                    • Clear bit → x &= ~(1 << k)<br>
+                    • Toggle bit → x ^= (1 << k)<br>
+                    • Remove lowest bit → x & (x - 1)<br>
+                    • Power of two → x & (x - 1) == 0<br>
+                    • Lowest bit → x & -x
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">10. PRACTICE</div>
+            <div class="section-body">
+                <div class="qa-block-single">1. Check bit 3 of 18</div>
+                <div class="qa-block-single">2. Set bit 1 of 4</div>
+                <div class="qa-block-single">3. Clear bit 2 of 13</div>
+                <div class="qa-block-single">4. Toggle bit 0 of 7</div>
+                <div class="qa-block-single">5. Find if 32 is power of two</div>
+                <div class="qa-block-single">6. Find lowest set bit of 40</div>
+            </div>
+        </div>
+    </div>
+
+
+
+</section>
+
+
+
+<section id="Topic4">
+
+<div class="inner-content"style="padding:0px 0px;">
+        <h1>🎯 GENERATING SUBSETS USING BITMASKS (C++)</h1>
+        <div class="subhead">Represent subsets using binary numbers — efficient, fast, and perfect for combinatorics problems.</div>
+
+        <div class="section-card">
+            <div class="section-title">1. What is a Subset?</div>
+            <div class="section-body">
+                <p>A subset of a sequence is a set that contains some or all elements of the original sequence. It can also contain no elements (empty set).</p>
+                <p>For example, for the sequence {1, 3, 5, 6, 7}:</p>
+                <ul style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                    <li>Valid subsets: {1, 3}, {3, 5, 7}, {1, 3, 5, 6, 7}, {}</li>
+                    <li>Invalid subsets: {1, 4}, {2, 7} (because elements are not in original sequence)</li>
+                </ul>
+                <p>A subset is formed only from existing elements of the original set.</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">2. Idea of Bitmasking</div>
+            <div class="section-body">
+                <p>Bitmasking is a technique where we use binary numbers to represent subsets.</p>
+                <p>Each element is represented by a bit:</p>
+                <ul style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                    <li>1 → element is included in subset</li>
+                    <li>0 → element is not included</li>
+                </ul>
+                <p>This allows us to represent all subsets using numbers from 0 to (2^n - 1).</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">3. Encoding Subsets as Binary Numbers</div>
+            <div class="section-body">
+                <p>For a sequence of length n, we use an n-bit binary number.</p>
+                <p>Each bit represents whether an element is included or not.</p>
+                <div class="example-full">
+                    <div class="example-title">Example: {5, 3, 1}</div>
+                    <div class="code-block-plain">
+                        | Subset    | Binary | Decimal |
+                        | --------- | ------ | ------- |
+                        | {}        | 000    | 0       |
+                        | {5}       | 001    | 1       |
+                        | {3}       | 010    | 2       |
+                        | {5, 3}    | 011    | 3       |
+                        | {1}       | 100    | 4       |
+                        | {5, 1}    | 101    | 5       |
+                        | {3, 1}    | 110    | 6       |
+                        | {5, 3, 1} | 111    | 7       |
+                    </div>
+                </div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">🔑</span><span>For a sequence of length n: Total subsets = 2^n | Range of masks = 0 to (1 << n) - 1</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">4. Generating All Subsets (Main Idea)</div>
+            <div class="section-body">
+                <p>We loop through all numbers from 0 to (2^n - 1). Each number represents one subset.</p>
+                <p>For each number, we check each bit:</p>
+                <ul style="margin-left: 2rem;">
+                    <li>If bit is 1 → include element</li>
+                    <li>If bit is 0 → ignore element</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">5. BASIC C++ PROGRAM (Given Example)</div>
+            <div class="section-body">
+                <p><strong>GOAL</strong><br>Understand how bitmasks generate all subsets step-by-step.</p>
+                <div class="prog"><div class="prog-header">📄 C++ PROGRAM</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n = 3;
+    int a[3] = {5, 3, 1};
+
+    for(int i = 0; i < (1 << n); i++) {
+        cout << i << ": ";
+
+        for(int j = 0; j < n; j++) {
+            bool set = (i & (1 << j)) != 0;
+
+            if(set) {
+                cout << a[j] << ' ';
+            }
+        }
+
+        cout << endl;
+    }
+}</code></pre></div>
+                <div><strong>STEP-BY-STEP EXPLANATION</strong></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>#include &lt;iostream&gt; → Adds input/output support, Enables cout</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>using namespace std → Avoids std:: prefix, Simplifies code</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>int n = 3 → Size of array, 3 elements in sequence</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>int a[3] → Array stores values {5, 3, 1}</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>Outer loop: for(int i = 0; i < (1 << n); i++) → (1 << n) = 2^n = 8, Loop from 0 to 7, Each i represents a subset</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>Print i → Shows subset number</span></div>
+                    <div class="step-item"><span class="step-num">7</span><span>Inner loop: for(int j = 0; j < n; j++) → Checks each bit position</span></div>
+                    <div class="step-item"><span class="step-num">8</span><span>Bit check: bool set = (i & (1 << j)) != 0; → Checks if j-th bit is ON, If yes → include element</span></div>
+                    <div class="step-item"><span class="step-num">9</span><span>if condition → If bit is set → print a[j]</span></div>
+                    <div class="step-item"><span class="step-num">10</span><span>End line → Moves to next subset</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">6. IMPROVED VERSION: Store Subsets</div>
+            <div class="section-body">
+                <p><strong>GOAL</strong><br>Store all subsets in a list instead of printing.</p>
+                <div class="prog"><div class="prog-header">📄 C++ PROGRAM</div><pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+    int n = 3;
+    int a[3] = {5, 3, 1};
+    vector&lt;vector&lt;int&gt;&gt; subsets;
+
+    for(int i = 0; i < (1 << n); i++) {
+        vector&lt;int&gt; temp;
+
+        for(int j = 0; j < n; j++) {
+            if(i & (1 << j)) {
+                temp.push_back(a[j]);
+            }
+        }
+
+        subsets.push_back(temp);
+    }
+
+    for(auto &s : subsets) {
+        for(int x : s)
+            cout << x << " ";
+        cout << endl;
+    }
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>vector stores subsets</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>temp stores each subset</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>push_back adds elements</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>outer loop generates subsets</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>inner loop checks bits</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">7. COUNT SUBSETS WITH SUM CONDITION</div>
+            <div class="section-body">
+                <p><strong>GOAL</strong><br>Find subsets whose sum is even.</p>
+                <div class="prog"><div class="prog-header">📄 C++ PROGRAM</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a[3] = {1, 2, 3};
+    int n = 3;
+    int count = 0;
+
+    for(int i = 0; i < (1 << n); i++) {
+        int sum = 0;
+
+        for(int j = 0; j < n; j++) {
+            if(i & (1 << j)) {
+                sum += a[j];
+            }
+        }
+
+        if(sum % 2 == 0)
+            count++;
+    }
+
+    cout << count;
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>generate all subsets</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>calculate sum</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>check condition</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>count valid subsets</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">8. STRING SUBSETS</div>
+            <div class="section-body">
+                <div class="prog"><div class="prog-header">📄 C++ PROGRAM</div><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+    string s = "abc";
+    int n = s.size();
+
+    for(int i = 0; i < (1 << n); i++) {
+        string temp = "";
+
+        for(int j = 0; j < n; j++) {
+            if(i & (1 << j)) {
+                temp += s[j];
+            }
+        }
+
+        cout << temp << endl;
+    }
+}</code></pre></div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">9. KEY POINTS</div>
+            <div class="section-body">
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">✓</span><span>Total subsets = 2^n</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Each number = one subset</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Bit = include/exclude decision</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Very fast method</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">10. PRACTICE QUESTIONS</div>
+            <div class="section-body">
+                <div class="qa-block-single">1. Print subsets of {2,4,6}</div>
+                <div class="qa-block-single">2. Count subsets of even sum</div>
+                <div class="qa-block-single">3. Generate subsets of string "xyz"</div>
+                <div class="qa-block-single">4. Find subsets with size 2</div>
+                <div class="qa-block-single">5. Print only non-empty subsets</div>
+                <div class="qa-block-single">6. Find subset with maximum sum</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">📌 SUMMARY</div>
+            <div class="section-body">
+                <p>Bitmasking allows us to represent subsets using binary numbers. Each bit represents whether an element is included or not. This technique is very powerful for solving combinatorics problems efficiently in C++.</p>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+
+<section id="Topic5">
+<div class="inner-content"style="padding:0px 0px;">
+        <h1>🔄 BACKTRACKING (C++) – FULL GUIDE</h1>
+        <div class="subhead">Explore all possible solutions by building step by step and undoing choices when needed — perfect for subsets, permutations, puzzles, and optimization.</div>
+
+        <div class="section-card">
+            <div class="section-title">1. What is Backtracking?</div>
+            <div class="section-body">
+                <p>Backtracking is a problem-solving technique that explores all possible solutions. It builds solutions step by step and removes (undoes) choices when they are no longer needed.</p>
+                <p>It is used when we need to try all combinations or possibilities. It is commonly used in recursion-based problems. Examples include subsets, permutations, puzzles, and optimization problems.</p>
+                <p>Backtracking is like trying paths in a maze. If one path fails, we go back and try another.</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">2. How Backtracking Works</div>
+            <div class="section-body">
+                <p>Backtracking follows these steps:</p>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>Start with an empty solution</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>Add one element (choice)</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>Recursively explore further</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>Undo the last choice (backtrack)</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>Try next possibility</span></div>
+                </div>
+                <p>This ensures all possibilities are explored.</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">3. Generating Subsets using Backtracking</div>
+            <div class="section-body">
+                <p><strong>Concept</strong><br>To generate all subsets:</p>
+                <ul style="margin-left: 2rem; margin-bottom: 0.5rem;">
+                    <li>For each element, we have 2 choices: Include it or Exclude it</li>
+                </ul>
+                <p>This creates a recursion tree.</p>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">4. GIVEN PROGRAM (Subsets)</div>
+            <div class="section-body">
+                <div class="prog"><div class="prog-header">📄 C++ PROGRAM</div><pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+int n = 3;
+int a[3] = {5, 3, 1};
+vector&lt;int&gt; v;
+
+void backtracking(int i) {
+
+    // if i == n, all the elements are considered, print the current subset
+    if (i == n) {
+        cout << "subset: ";
+        for (int j = 0; j < v.size(); j++) {
+            cout << v[j] << ' ';
+        }
+        cout << "\n";
+        return;
+    }
+
+    // try when a[i] is included
+    v.push_back(a[i]);
+    backtracking(i + 1);
+
+    // try when a[i] is excluded
+    v.pop_back();
+    backtracking(i + 1);
+}
+
+int main() {
+    backtracking(0);
+}</code></pre></div>
+                <div><strong>STEP-BY-STEP EXPLANATION</strong></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>Global variables: n = 3 → size of array, a[] → stores values {5,3,1}, vector v → stores current subset</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>Function backtracking(i) → i represents current index, recursion explores all choices</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>Base condition: if(i == n) → all elements processed, print current subset, return</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>Include element: v.push_back(a[i]) → add element, explore further</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>Recursive call: backtracking(i+1) → move to next index</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>Undo step: v.pop_back() → remove last element, backtrack</span></div>
+                    <div class="step-item"><span class="step-num">7</span><span>Exclude element: call backtracking(i+1) → explore without element</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">5. Visual Idea (Tree)</div>
+            <div class="section-body">
+                <div class="code-block-plain">For array {5,3}<br><br>        {}<br>      /    \<br>    {5}    {}<br>   /   \   /   \<br>{5,3} {5} {3} {}</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">6. Additional Example: Count Subsets</div>
+            <div class="section-body">
+                <p><strong>GOAL</strong><br>Count total subsets using backtracking</p>
+                <div class="prog"><div class="prog-header">📄 C++ PROGRAM</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int n = 3;
+int count = 0;
+
+void backtracking(int i) {
+    if(i == n) {
+        count++;
+        return;
+    }
+
+    backtracking(i+1);
+    backtracking(i+1);
+}
+
+int main() {
+    backtracking(0);
+    cout << count;
+}</code></pre></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">•</span><span>each element has 2 choices</span></div>
+                    <div class="step-item"><span class="step-num">•</span><span>total = 2^n subsets</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">7. Example Problem: Apple Division</div>
+            <div class="section-body">
+                <p><strong>PROBLEM</strong><br>Divide array into 2 groups such that difference of sums is minimum.</p>
+                <div class="prog"><div class="prog-header">📄 GIVEN PROGRAM</div><pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+int n;
+int a[20];
+long long sum1 = 0;
+long long sum2 = 0;
+long long ans = 2000000000;
+
+void backtracking(int i) {
+    if (i == n) {
+        ans = min(ans, abs(sum1 - sum2));
+        return;
+    }
+
+    sum1 += a[i];
+    backtracking(i + 1);
+    sum1 -= a[i];
+
+    sum2 += a[i];
+    backtracking(i + 1);
+    sum2 -= a[i];
+}
+
+int main() {
+
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    backtracking(0);
+
+    cout << ans << "\n";
+}</code></pre></div>
+                <div><strong>STEP-BY-STEP EXPLANATION</strong></div>
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">1</span><span>Input: n → number of elements, array a stores values</span></div>
+                    <div class="step-item"><span class="step-num">2</span><span>Variables: sum1 → group1 sum, sum2 → group2 sum, ans → minimum difference</span></div>
+                    <div class="step-item"><span class="step-num">3</span><span>Base case: if(i == n) → all elements assigned, calculate difference, update answer</span></div>
+                    <div class="step-item"><span class="step-num">4</span><span>Choice 1: add element to sum1, explore, undo (subtract)</span></div>
+                    <div class="step-item"><span class="step-num">5</span><span>Choice 2: add element to sum2, explore, undo</span></div>
+                    <div class="step-item"><span class="step-num">6</span><span>Output: print minimum difference</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">8. Additional Example: Print All Binary Strings</div>
+            <div class="section-body">
+                <div class="prog"><div class="prog-header">📄 C++ PROGRAM</div><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int n = 3;
+int a[3];
+
+void backtracking(int i) {
+    if(i == n) {
+        for(int j=0;j<n;j++) cout<<a[j];
+        cout<<endl;
+        return;
+    }
+
+    a[i] = 0;
+    backtracking(i+1);
+
+    a[i] = 1;
+    backtracking(i+1);
+}
+
+int main() {
+    backtracking(0);
+}</code></pre></div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">9. Key Points</div>
+            <div class="section-body">
+                <div class="step-list">
+                    <div class="step-item"><span class="step-num">✓</span><span>Backtracking explores all possibilities</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Uses recursion</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Always undo changes</span></div>
+                    <div class="step-item"><span class="step-num">✓</span><span>Time complexity often exponential</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">10. Practice Questions</div>
+            <div class="section-body">
+                <div class="qa-block-single">1. Print all subsets of {1,2,3}</div>
+                <div class="qa-block-single">2. Count subsets</div>
+                <div class="qa-block-single">3. Generate binary strings of length n</div>
+                <div class="qa-block-single">4. Solve subset sum problem</div>
+                <div class="qa-block-single">5. Find permutations of array</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">📌 SUMMARY</div>
+            <div class="section-body">
+                <p>Backtracking is a powerful technique used to explore all possible solutions. It builds solutions step by step and removes choices when needed. It is widely used in recursion problems and optimization tasks.</p>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+
+</div> <!-- main panel-->
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- RIGHT PANEL -->
+        <div class="weeks-wrapper"
+             style="width:100%; padding-right:1%;
+             background-image: linear-gradient(to right, #d3d3d3, transparent);
+             background-position:left; background-repeat:no-repeat;
+             background-size:4% 100%; padding-left:30px;">
+
+          <!-- GRADE 12 SECTION -->
+   <div class="menu-header"
+     style="display:flex; justify-content:space-between; align-text:left; width:100%;border-bottom:3px solid blue;width:90%;">
+     <button id="HomeButton" class="lesson-btn"
+            style="height:30px;width:30px; display:flex; justify-content:center; align-items:center;border:none;">
+        🏠
+    </button>
+    <h1 id="GradeMainHeading" style="margin:0;border:none;text-align:left;font-family:'Times New Roman', Times, serif; font-weight:bold;">
+        ⚡TRAINING GUIDE: C++ OLYMPAID
+    </h1>
+    
+   
+
+</div>
+
+  <div id="RightPanel"class="instructions-panel"style="overflow-y:auto;">
+<section id="LessonGrid" style="height:100%;">
+   
+          <div class="weeks-grid" id="weekGrid" style="display: flex; flex-wrap: wrap; height: 95%; width: 100%; overflow: hidden; gap: 5px;">
+
+            <!-- WEEK 1 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade">Bitwise Operations</h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+<button class="lesson-btn" data-topic="Topic1">Load Lesson 1</button>                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 2 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade">Structures</h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+<button class="lesson-btn" data-topic="Topic2">Load Lesson 2</button>                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 3 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade">Bit Manipulation Tricks</h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+                  <button class="lesson-btn" data-topic="Topic3">Load Lesson 3</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 4 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade">Generating Subsets Using Bitmasks</h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+                  <button class="lesson-btn" data-topic="Topic4">Load Lesson 4</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 5 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade">Backtracking</h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+                  <button class="lesson-btn" data-topic="Topic5">Load Lesson 5</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 6 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade">Dynamic Programming</h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+                  <button id="FlipBackLessonId" class="lesson-btn">Load Lesson</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 7 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade"></h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+                  <button id="FlipBackLessonId" class="lesson-btn">Load Lesson</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 8 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade"></h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+                  <button id="FlipBackLessonId" class="lesson-btn">Load Lesson</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- WEEK 9 -->
+            <div class="flip-card" style="flex: 1 1 calc(33.333% - 10px);">
+              <div class="flip-inner">
+                <div class="flip-front" style="text-align:center;">
+                  <h5 id="FlipFrontGradeSubject">C++</h5>
+                  <h5 id="FlipFrontGradeGrade"></h5>
+                  <h2>STAGE 3</h2>
+                </div>
+                <div class="flip-back">
+                  <button id="FlipBackLessonId" class="lesson-btn">Load Lesson</button>
+                </div>
+              </div>
+            </div>
+
+</section>
+
+<section id="IframeSection" style="height:97%;display:none;background:black;overflow-y:hidden;">
+<iframe
+      id="lab-iframe"
+      src="https://www.jdoodle.com/online-compiler-c++"
+      style="width:104%; height:100%; border:none; border-radius:0 0 10px 10px; background:white;margin-left:-30px;background:black;"
+      
+    ></iframe>
+</section>
+</div>
+        
+
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const sections = document.querySelectorAll("#LeftPanel section");
+
+    const lessonGrid = document.getElementById("LessonGrid");
+    const iframeSection = document.getElementById("IframeSection");
+
+    // Show Topic1 initially
+    document.getElementById("Topic1").classList.add("active");
+
+    document.querySelectorAll(".lesson-btn").forEach(button => {
+        button.addEventListener("click", function () {
+
+            const topicId = this.dataset.topic;
+
+            // EXISTING LOGIC
+            sections.forEach(sec => sec.classList.remove("active"));
+
+            const target = document.getElementById(topicId);
+            if (target) {
+                target.classList.add("active");
+            }
+
+            // ✅ FIX: Home button should load Topic1
+            if (this.id === "HomeButton") {
+                document.getElementById("Topic1").classList.add("active");
+
+                lessonGrid.style.display = "block";
+                iframeSection.style.display = "none";
+                return; // stop further execution
+            }
+
+            // NEW LOGIC → Switch RightPanel to iframe
+            if (topicId) {
+                lessonGrid.style.display = "none";
+                iframeSection.style.display = "block";
+            }
+
+        });
+    });
+
+});
+
+</script>
+
+
+
+
+    
+
+
+
+</body>
+</html>
